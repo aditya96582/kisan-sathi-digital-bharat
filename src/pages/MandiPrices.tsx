@@ -1,0 +1,414 @@
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ArrowLeft, TrendingUp, TrendingDown, Search, MapPin, Clock, RefreshCw } from "lucide-react";
+import { Link } from "react-router-dom";
+
+const MandiPrices = () => {
+  const [selectedState, setSelectedState] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+
+  const states = [
+    { code: "all", name: "All States" },
+    { code: "up", name: "Uttar Pradesh" },
+    { code: "mh", name: "Maharashtra" },
+    { code: "pb", name: "Punjab" },
+    { code: "hr", name: "Haryana" },
+    { code: "rj", name: "Rajasthan" },
+    { code: "mp", name: "Madhya Pradesh" },
+    { code: "gj", name: "Gujarat" },
+    { code: "wb", name: "West Bengal" },
+    { code: "tn", name: "Tamil Nadu" },
+    { code: "kn", name: "Karnataka" },
+    { code: "ap", name: "Andhra Pradesh" },
+    { code: "ts", name: "Telangana" }
+  ];
+
+  const marketPrices = [
+    {
+      commodity: "Wheat",
+      hindiName: "गेहूं",
+      state: "Punjab",
+      mandi: "Amritsar",
+      minPrice: 2100,
+      maxPrice: 2150,
+      modalPrice: 2125,
+      trend: "up",
+      change: "+25",
+      unit: "per quintal"
+    },
+    {
+      commodity: "Rice",
+      hindiName: "चावल",
+      state: "Punjab",
+      mandi: "Patiala",
+      minPrice: 3200,
+      maxPrice: 3400,
+      modalPrice: 3300,
+      trend: "up",
+      change: "+50",
+      unit: "per quintal"
+    },
+    {
+      commodity: "Sugarcane",
+      hindiName: "गन्ना",
+      state: "Uttar Pradesh",
+      mandi: "Muzaffarnagar",
+      minPrice: 280,
+      maxPrice: 320,
+      modalPrice: 300,
+      trend: "stable",
+      change: "0",
+      unit: "per quintal"
+    },
+    {
+      commodity: "Cotton",
+      hindiName: "कपास",
+      state: "Maharashtra",
+      mandi: "Akola",
+      minPrice: 5800,
+      maxPrice: 6200,
+      modalPrice: 6000,
+      trend: "down",
+      change: "-100",
+      unit: "per quintal"
+    },
+    {
+      commodity: "Onion",
+      hindiName: "प्याज",
+      state: "Maharashtra",
+      mandi: "Lasalgaon",
+      minPrice: 1200,
+      maxPrice: 1500,
+      modalPrice: 1350,
+      trend: "up",
+      change: "+200",
+      unit: "per quintal"
+    },
+    {
+      commodity: "Potato",
+      hindiName: "आलू",
+      state: "Uttar Pradesh",
+      mandi: "Agra",
+      minPrice: 800,
+      maxPrice: 1000,
+      modalPrice: 900,
+      trend: "down",
+      change: "-50",
+      unit: "per quintal"
+    },
+    {
+      commodity: "Tomato",
+      hindiName: "टमाटर",
+      state: "Karnataka",
+      mandi: "Bangalore",
+      minPrice: 1500,
+      maxPrice: 2000,
+      modalPrice: 1750,
+      trend: "up",
+      change: "+150",
+      unit: "per quintal"
+    },
+    {
+      commodity: "Mustard",
+      hindiName: "सरसों",
+      state: "Rajasthan",
+      mandi: "Bharatpur",
+      minPrice: 4200,
+      maxPrice: 4500,
+      modalPrice: 4350,
+      trend: "up",
+      change: "+75",
+      unit: "per quintal"
+    },
+    {
+      commodity: "Maize",
+      hindiName: "मक्का",
+      state: "Madhya Pradesh",
+      mandi: "Bhopal",
+      minPrice: 1800,
+      maxPrice: 1950,
+      modalPrice: 1875,
+      trend: "stable",
+      change: "0",
+      unit: "per quintal"
+    },
+    {
+      commodity: "Soybean",
+      hindiName: "सोयाबीन",
+      state: "Madhya Pradesh",
+      mandi: "Indore",
+      minPrice: 3800,
+      maxPrice: 4100,
+      modalPrice: 3950,
+      trend: "down",
+      change: "-25",
+      unit: "per quintal"
+    },
+    {
+      commodity: "Groundnut",
+      hindiName: "मूंगफली",
+      state: "Gujarat",
+      mandi: "Rajkot",
+      minPrice: 5200,
+      maxPrice: 5600,
+      modalPrice: 5400,
+      trend: "up",
+      change: "+100",
+      unit: "per quintal"
+    },
+    {
+      commodity: "Turmeric",
+      hindiName: "हल्दी",
+      state: "Tamil Nadu",
+      mandi: "Erode",
+      minPrice: 8500,
+      maxPrice: 9200,
+      modalPrice: 8850,
+      trend: "up",
+      change: "+200",
+      unit: "per quintal"
+    }
+  ];
+
+  const filteredPrices = marketPrices.filter(price => {
+    const matchesState = selectedState === "all" || price.state.toLowerCase().includes(states.find(s => s.code === selectedState)?.name.toLowerCase() || "");
+    const matchesSearch = searchQuery === "" || 
+      price.commodity.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      price.hindiName.includes(searchQuery) ||
+      price.mandi.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    return matchesState && matchesSearch;
+  });
+
+  const refreshPrices = () => {
+    setLastUpdated(new Date());
+    // Simulate data refresh
+    setTimeout(() => {
+      console.log("Prices refreshed");
+    }, 1000);
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0
+    }).format(price);
+  };
+
+  const getTrendIcon = (trend: string) => {
+    switch (trend) {
+      case 'up':
+        return <TrendingUp className="w-4 h-4 text-success" />;
+      case 'down':
+        return <TrendingDown className="w-4 h-4 text-destructive" />;
+      default:
+        return <div className="w-4 h-4 bg-muted rounded-full" />;
+    }
+  };
+
+  const getTrendColor = (trend: string) => {
+    switch (trend) {
+      case 'up':
+        return 'text-success';
+      case 'down':
+        return 'text-destructive';
+      default:
+        return 'text-muted-foreground';
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-info/5">
+      {/* Header */}
+      <header className="border-b bg-background/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="icon" asChild>
+                <Link to="/">
+                  <ArrowLeft className="w-5 h-5" />
+                </Link>
+              </Button>
+              <div className="flex items-center space-x-2">
+                <TrendingUp className="w-6 h-6 text-success" />
+                <h1 className="text-xl font-bold">Live Mandi Prices</h1>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Badge variant="secondary" className="hidden sm:flex">
+                <Clock className="w-3 h-3 mr-1" />
+                Updated: {lastUpdated.toLocaleTimeString()}
+              </Badge>
+              <Button variant="outline" size="sm" onClick={refreshPrices}>
+                <RefreshCw className="w-4 h-4 mr-1" />
+                Refresh
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8">
+        {/* Filters */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Filter Market Prices</CardTitle>
+            <CardDescription>
+              Search by commodity, state, or mandi name
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search commodity, mandi..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <Select value={selectedState} onValueChange={setSelectedState}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select State" />
+                </SelectTrigger>
+                <SelectContent>
+                  {states.map((state) => (
+                    <SelectItem key={state.code} value={state.code}>
+                      {state.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="text-sm text-muted-foreground flex items-center">
+                <MapPin className="w-4 h-4 mr-1" />
+                Showing {filteredPrices.length} results
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Market Prices Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredPrices.map((price, index) => (
+            <Card key={index} className="hover:shadow-lg transition-shadow">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-lg">{price.commodity}</CardTitle>
+                    <CardDescription className="text-sm">{price.hindiName}</CardDescription>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    {getTrendIcon(price.trend)}
+                    <span className={`text-sm font-medium ${getTrendColor(price.trend)}`}>
+                      {price.change !== "0" ? price.change : "No change"}
+                    </span>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Modal Price</span>
+                    <span className="text-lg font-bold text-primary">
+                      {formatPrice(price.modalPrice)}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <span className="text-muted-foreground">Min:</span>
+                      <span className="ml-1 font-medium">{formatPrice(price.minPrice)}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Max:</span>
+                      <span className="ml-1 font-medium">{formatPrice(price.maxPrice)}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-2 border-t">
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center text-muted-foreground">
+                        <MapPin className="w-3 h-3 mr-1" />
+                        {price.mandi}, {price.state}
+                      </div>
+                      <Badge variant="outline" className="text-xs">
+                        {price.unit}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Market Insights */}
+        <div className="grid md:grid-cols-2 gap-6 mt-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Market Insights</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="p-3 bg-success/10 rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <TrendingUp className="w-4 h-4 text-success" />
+                    <span className="text-sm font-medium">Price Rising</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Wheat and Rice prices are trending upward due to increased demand
+                  </p>
+                </div>
+                
+                <div className="p-3 bg-warning/10 rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <TrendingDown className="w-4 h-4 text-warning" />
+                    <span className="text-sm font-medium">Price Alert</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Cotton prices have dropped by ₹100 per quintal in Maharashtra
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Quick Tips</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-start space-x-2">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                  <p>Check prices before travelling to mandi to avoid losses</p>
+                </div>
+                <div className="flex items-start space-x-2">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                  <p>Morning hours typically have better prices</p>
+                </div>
+                <div className="flex items-start space-x-2">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                  <p>Quality of produce affects final price significantly</p>
+                </div>
+                <div className="flex items-start space-x-2">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                  <p>Consider transport costs when choosing mandi</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MandiPrices;
