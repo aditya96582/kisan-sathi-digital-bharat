@@ -1,0 +1,228 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { 
+  GamepadIcon, 
+  QrCode, 
+  Shield, 
+  Calendar, 
+  Gift,
+  TrendingUp,
+  Users,
+  Award,
+  Bell,
+  ChevronRight,
+  Coins
+} from "lucide-react";
+import { Link } from "react-router-dom";
+
+const Dashboard = () => {
+  const quickStats = [
+    { label: "Today's Mandi Price", value: "₹2,450/quintal", change: "+5.2%", icon: TrendingUp },
+    { label: "Active Farmers", value: "12,847", change: "+8.1%", icon: Users },
+    { label: "Game Tokens Earned", value: "2,350", change: "+15%", icon: Award },
+    { label: "Pending Alerts", value: "3", change: "New", icon: Bell }
+  ];
+
+  const recentActivities = [
+    { action: "Crop Health Scan", crop: "Wheat", result: "Healthy", time: "2 hours ago" },
+    { action: "Mandi e-Pass Generated", location: "Kanpur Mandi", time: "4 hours ago" },
+    { action: "Game Level Completed", game: "Fertilizer Quiz", reward: "50 tokens", time: "1 day ago" },
+    { action: "Weather Alert", message: "Rain expected tomorrow", time: "1 day ago" }
+  ];
+
+  const upcomingReminders = [
+    { task: "Wheat Irrigation", date: "Tomorrow", priority: "high" },
+    { task: "Fertilizer Application", date: "Jan 12", priority: "medium" },
+    { task: "Pest Control Check", date: "Jan 15", priority: "low" }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-info/5">
+      {/* Header */}
+      <header className="border-b bg-background/80 backdrop-blur-md">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">Farmer Dashboard</h1>
+              <p className="text-muted-foreground">Welcome back, Ramesh Kumar</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Badge className="bg-success/10 text-success border-success/20">
+                <Coins className="w-3 h-3 mr-1" />
+                2,350 Tokens
+              </Badge>
+              <Link to="/">
+                <Button variant="outline" size="sm">Home</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8">
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {quickStats.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <Card key={index}>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">{stat.label}</p>
+                      <p className="text-2xl font-bold">{stat.value}</p>
+                      <p className="text-sm text-success">{stat.change}</p>
+                    </div>
+                    <Icon className="w-8 h-8 text-primary" />
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Features */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Quick Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+                <CardDescription>Access your most used features</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <Link to="/agri-game">
+                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                      <GamepadIcon className="w-6 h-6 text-primary" />
+                      <span className="text-sm">Play & Learn</span>
+                    </Button>
+                  </Link>
+                  <Link to="/e-pass">
+                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                      <QrCode className="w-6 h-6 text-info" />
+                      <span className="text-sm">Generate e-Pass</span>
+                    </Button>
+                  </Link>
+                  <Link to="/blockchain-tracking">
+                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                      <Shield className="w-6 h-6 text-success" />
+                      <span className="text-sm">Track Payments</span>
+                    </Button>
+                  </Link>
+                  <Link to="/crop-calendar">
+                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                      <Calendar className="w-6 h-6 text-warning" />
+                      <span className="text-sm">Crop Calendar</span>
+                    </Button>
+                  </Link>
+                  <Link to="/subsidy-finder">
+                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                      <Gift className="w-6 h-6 text-primary" />
+                      <span className="text-sm">Find Subsidies</span>
+                    </Button>
+                  </Link>
+                  <Link to="/prices">
+                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                      <TrendingUp className="w-6 h-6 text-info" />
+                      <span className="text-sm">Market Prices</span>
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Recent Activities */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Activities</CardTitle>
+                <CardDescription>Your latest actions and updates</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentActivities.map((activity, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                      <div>
+                        <p className="font-medium">{activity.action}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {activity.crop && `${activity.crop} - `}
+                          {activity.result && `${activity.result} - `}
+                          {activity.location && `${activity.location} - `}
+                          {activity.game && `${activity.game} - `}
+                          {activity.reward && `+${activity.reward} - `}
+                          {activity.message && `${activity.message} - `}
+                          {activity.time}
+                        </p>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Upcoming Reminders */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Upcoming Reminders</CardTitle>
+                <CardDescription>Your farming schedule</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {upcomingReminders.map((reminder, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                      <div>
+                        <p className="font-medium">{reminder.task}</p>
+                        <p className="text-sm text-muted-foreground">{reminder.date}</p>
+                      </div>
+                      <Badge 
+                        variant={reminder.priority === 'high' ? 'destructive' : 
+                               reminder.priority === 'medium' ? 'default' : 'secondary'}
+                      >
+                        {reminder.priority}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Token Progress */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Game Progress</CardTitle>
+                <CardDescription>Keep learning to earn more tokens</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Level 5</span>
+                      <span>2,350 / 3,000</span>
+                    </div>
+                    <Progress value={78} className="h-2" />
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    650 more tokens needed for Level 6
+                  </p>
+                  <Link to="/agri-game">
+                    <Button size="sm" className="w-full">
+                      Play More Games
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;

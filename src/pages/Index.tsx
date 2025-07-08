@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Mic, TrendingUp, Camera, Cloud, Users, Shield, Globe, Zap } from "lucide-react";
+import { Mic, TrendingUp, Camera, Cloud, Users, Shield, Globe, Zap, GamepadIcon, QrCode, Calendar, Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-smart-bharat.jpg";
 
@@ -30,6 +30,36 @@ const Index = () => {
       title: "Weather Advisory",
       description: "Location-based weather forecasts and farming recommendations",
       href: "/weather"
+    },
+    {
+      icon: <GamepadIcon className="w-8 h-8 text-primary" />,
+      title: "Agri Knowledge Game",
+      description: "Gamified learning with rewards and tokens for real-life benefits",
+      href: "/agri-game"
+    },
+    {
+      icon: <QrCode className="w-8 h-8 text-info" />,
+      title: "e-Pass Generator",
+      description: "QR-based digital mandi entry pass for priority sale and queue-free entry",
+      href: "/e-pass"
+    },
+    {
+      icon: <Shield className="w-8 h-8 text-success" />,
+      title: "Blockchain Tracking",
+      description: "Transparent and secure mandi payment tracking with blockchain technology",
+      href: "/blockchain-tracking"
+    },
+    {
+      icon: <Calendar className="w-8 h-8 text-warning" />,
+      title: "Crop Calendar",
+      description: "Personalized farming schedule with SMS & voice reminders",
+      href: "/crop-calendar"
+    },
+    {
+      icon: <Gift className="w-8 h-8 text-primary" />,
+      title: "Subsidy Finder",
+      description: "Find government schemes with audio explanations in local languages",
+      href: "/subsidy-finder"
     }
   ];
 
@@ -78,17 +108,17 @@ const Index = () => {
               </h1>
             </div>
             <nav className="hidden md:flex space-x-6">
+              <Link to="/dashboard" className="text-muted-foreground hover:text-primary transition-colors">
+                Dashboard
+              </Link>
               <Link to="/voice" className="text-muted-foreground hover:text-primary transition-colors">
                 Voice Assistant
               </Link>
               <Link to="/prices" className="text-muted-foreground hover:text-primary transition-colors">
                 Mandi Prices
               </Link>
-              <Link to="/crop-health" className="text-muted-foreground hover:text-primary transition-colors">
-                Crop Health
-              </Link>
-              <Link to="/weather" className="text-muted-foreground hover:text-primary transition-colors">
-                Weather
+              <Link to="/agri-game" className="text-muted-foreground hover:text-primary transition-colors">
+                Games
               </Link>
             </nav>
           </div>
@@ -115,15 +145,15 @@ const Index = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-gradient-to-r from-primary to-primary-glow text-white hover:shadow-lg transition-all">
-              <Link to="/voice" className="flex items-center gap-2">
-                <Mic className="w-5 h-5" />
-                Start Voice Assistant
+              <Link to="/dashboard" className="flex items-center gap-2">
+                <Users className="w-5 h-5" />
+                Go to Dashboard
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20 backdrop-blur-sm">
-              <Link to="/prices" className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5" />
-                View Market Prices
+              <Link to="/agri-game" className="flex items-center gap-2">
+                <GamepadIcon className="w-5 h-5" />
+                Play & Learn
               </Link>
             </Button>
           </div>
@@ -153,7 +183,7 @@ const Index = () => {
               Advanced agricultural technology solutions designed for Indian farmers
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index} className="hover:shadow-lg transition-all duration-300 border-0 bg-gradient-to-br from-white to-gray-50">
                 <CardHeader className="text-center pb-4">
