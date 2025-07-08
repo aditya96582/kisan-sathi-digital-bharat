@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Mic, TrendingUp, Camera, Cloud, Users, Shield, Globe, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
+import heroImage from "@/assets/hero-smart-bharat.jpg";
 
 const Index = () => {
   const features = [
@@ -95,15 +96,20 @@ const Index = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto text-center">
-          <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
+      <section className="relative py-20 px-4 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10"></div>
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        ></div>
+        <div className="container mx-auto text-center relative z-20">
+          <Badge className="mb-4 bg-primary/20 text-white border-primary/30 backdrop-blur-sm">
             🚀 Smart Bharat Innovation Project
           </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-info to-primary bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
             Empowering Farmers Through Technology
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+          <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
             A comprehensive agricultural platform offering voice-based assistance, real-time market prices, 
             AI-powered crop health detection, and weather advisory services in multiple regional languages.
           </p>
@@ -114,7 +120,7 @@ const Index = () => {
                 Start Voice Assistant
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10">
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20 backdrop-blur-sm">
               <Link to="/prices" className="flex items-center gap-2">
                 <TrendingUp className="w-5 h-5" />
                 View Market Prices
