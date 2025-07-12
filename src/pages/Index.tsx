@@ -227,27 +227,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Technology Stack */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Technology Stack</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Built with modern, scalable technologies for optimal performance
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
-            {['React', 'TypeScript', 'AI/ML', 'Voice API', 'PWA', 'Cloud'].map((tech, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <span className="text-primary font-semibold text-sm">{tech}</span>
-                </div>
-                <p className="text-muted-foreground text-sm">{tech}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="py-12 px-4 bg-gray-50 border-t">
