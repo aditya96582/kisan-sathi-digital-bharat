@@ -14,7 +14,225 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      crop_analysis: {
+        Row: {
+          analysis_result: Json | null
+          confidence_score: number | null
+          created_at: string
+          crop_health_status: string | null
+          disease_detected: string | null
+          id: string
+          image_url: string | null
+          location_lat: number | null
+          location_lon: number | null
+          recommendations: string | null
+          user_id: string | null
+        }
+        Insert: {
+          analysis_result?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          crop_health_status?: string | null
+          disease_detected?: string | null
+          id?: string
+          image_url?: string | null
+          location_lat?: number | null
+          location_lon?: number | null
+          recommendations?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          analysis_result?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          crop_health_status?: string | null
+          disease_detected?: string | null
+          id?: string
+          image_url?: string | null
+          location_lat?: number | null
+          location_lon?: number | null
+          recommendations?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      crop_suggestions: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          crop_name: string
+          crop_type: string
+          harvest_season: string | null
+          id: string
+          location_lat: number
+          location_lon: number
+          planting_season: string | null
+          soil_type: string | null
+          temperature_range: string | null
+          user_id: string | null
+          water_requirement: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          crop_name: string
+          crop_type: string
+          harvest_season?: string | null
+          id?: string
+          location_lat: number
+          location_lon: number
+          planting_season?: string | null
+          soil_type?: string | null
+          temperature_range?: string | null
+          user_id?: string | null
+          water_requirement?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          crop_name?: string
+          crop_type?: string
+          harvest_season?: string | null
+          id?: string
+          location_lat?: number
+          location_lon?: number
+          planting_season?: string | null
+          soil_type?: string | null
+          temperature_range?: string | null
+          user_id?: string | null
+          water_requirement?: string | null
+        }
+        Relationships: []
+      }
+      weather_data: {
+        Row: {
+          created_at: string
+          current_temp: number | null
+          humidity: number | null
+          id: string
+          location_lat: number
+          location_lon: number
+          location_name: string
+          soil_moisture: number | null
+          soil_type: string | null
+          updated_at: string
+          uv_index: number | null
+          weather_condition: string | null
+          wind_speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          current_temp?: number | null
+          humidity?: number | null
+          id?: string
+          location_lat: number
+          location_lon: number
+          location_name: string
+          soil_moisture?: number | null
+          soil_type?: string | null
+          updated_at?: string
+          uv_index?: number | null
+          weather_condition?: string | null
+          wind_speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          current_temp?: number | null
+          humidity?: number | null
+          id?: string
+          location_lat?: number
+          location_lon?: number
+          location_name?: string
+          soil_moisture?: number | null
+          soil_type?: string | null
+          updated_at?: string
+          uv_index?: number | null
+          weather_condition?: string | null
+          wind_speed?: number | null
+        }
+        Relationships: []
+      }
+      weather_forecast: {
+        Row: {
+          created_at: string
+          forecast_date: string
+          humidity: number | null
+          id: string
+          location_lat: number
+          location_lon: number
+          max_temp: number | null
+          min_temp: number | null
+          precipitation_chance: number | null
+          weather_condition: string | null
+        }
+        Insert: {
+          created_at?: string
+          forecast_date: string
+          humidity?: number | null
+          id?: string
+          location_lat: number
+          location_lon: number
+          max_temp?: number | null
+          min_temp?: number | null
+          precipitation_chance?: number | null
+          weather_condition?: string | null
+        }
+        Update: {
+          created_at?: string
+          forecast_date?: string
+          humidity?: number | null
+          id?: string
+          location_lat?: number
+          location_lon?: number
+          max_temp?: number | null
+          min_temp?: number | null
+          precipitation_chance?: number | null
+          weather_condition?: string | null
+        }
+        Relationships: []
+      }
+      weather_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          location_lat: number | null
+          location_lon: number | null
+          message: string
+          notification_type: string
+          priority: string | null
+          title: string
+          user_id: string | null
+          weather_condition: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          location_lat?: number | null
+          location_lon?: number | null
+          message: string
+          notification_type: string
+          priority?: string | null
+          title: string
+          user_id?: string | null
+          weather_condition?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          location_lat?: number | null
+          location_lon?: number | null
+          message?: string
+          notification_type?: string
+          priority?: string | null
+          title?: string
+          user_id?: string | null
+          weather_condition?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
