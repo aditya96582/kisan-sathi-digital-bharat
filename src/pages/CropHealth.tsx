@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,14 +6,24 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Camera, Upload, Scan, AlertTriangle, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-
+import { supabase } from "@/integrations/supabase/client";
 const CropHealth = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const [confidence, setConfidence] = useState(0);
+  const [mode, setMode] = useState<'online' | 'offline'>('online');
+  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lon: number }>({ lat: 28.6139, lon: 77.209 });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setCurrentLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+        () => {/* keep default Delhi coords */}
+      );
+    }
+  }, []);
   const sampleDiseases = [
     {
       name: "Leaf Spot",
@@ -72,35 +82,52 @@ const CropHealth = () => {
     fileInputRef.current?.click();
   };
 
-  const analyzeCrop = async () => {
-    if (!selectedImage) {
-      toast.error("Please select an image first");
-      return;
-    }
+const analyzeCrop = async () => {
+  if (!selectedImage) {
+    toast.error("Please select an image first");
+    return;
+  }
 
-    setIsAnalyzing(true);
-    setConfidence(0);
+  if (mode === 'offline') {
+    toast.info("Offline detection coming soon. We'll link your on-device model here.");
+    return;
+  }
 
-    // Simulate AI analysis with progress
-    const progressInterval = setInterval(() => {
-      setConfidence(prev => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 200);
+  setIsAnalyzing(true);
+  setConfidence(0);
 
-    // Simulate API call
-    setTimeout(() => {
-      const randomDisease = sampleDiseases[Math.floor(Math.random() * sampleDiseases.length)];
-      setAnalysisResult(randomDisease);
-      setIsAnalyzing(false);
-      setConfidence(randomDisease.confidence);
-      toast.success("Analysis complete!");
-    }, 2500);
-  };
+  const progressInterval = setInterval(() => {
+    setConfidence(prev => {
+      if (prev >= 98) return 98; // stop just before 100 until response
+      return prev + 5;
+    });
+  }, 200);
+
+  try {
+    const { data, error } = await supabase.functions.invoke('gemini-crop-analysis', {
+      body: {
+        image: selectedImage,
+        lat: currentLocation.lat,
+        lon: currentLocation.lon,
+        userId: null,
+      }
+    });
+
+    if (error) throw error;
+
+    setAnalysisResult(data.analysis || data);
+    const c = data?.analysis?.confidence_level ?? data?.confidence ?? 100;
+    setConfidence(typeof c === 'number' ? Math.min(100, c) : 100);
+    toast.success("Analysis complete!");
+  } catch (err) {
+    console.error('Analysis error', err);
+    toast.error("Failed to analyze image. Please try again.");
+  } finally {
+    clearInterval(progressInterval);
+    setConfidence(prev => (prev < 100 ? 100 : prev));
+    setIsAnalyzing(false);
+  }
+};
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -222,35 +249,47 @@ const CropHealth = () => {
                 className="hidden"
               />
 
-              {/* Analyze Button */}
-              <Button 
-                onClick={analyzeCrop}
-                disabled={!selectedImage || isAnalyzing}
-                className="w-full bg-warning hover:bg-warning/90"
-              >
-                {isAnalyzing ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <Scan className="w-4 h-4 mr-2" />
-                    Analyze Crop Health
-                  </>
-                )}
-              </Button>
+{/* Detection Mode */}
+<div className="flex items-center justify-between">
+  <div>
+    <p className="text-sm font-medium">Detection Mode</p>
+    <p className="text-xs text-muted-foreground">Online uses Gemini AI • Offline coming soon</p>
+  </div>
+  <div className="grid grid-cols-2 gap-2">
+    <Button size="sm" variant={mode === 'online' ? 'default' : 'outline'} onClick={() => setMode('online')}>Online</Button>
+    <Button size="sm" variant={mode === 'offline' ? 'default' : 'outline'} onClick={() => setMode('offline')}>Offline</Button>
+  </div>
+</div>
 
-              {/* Analysis Progress */}
-              {isAnalyzing && (
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Analysis Progress</span>
-                    <span>{confidence}%</span>
-                  </div>
-                  <Progress value={confidence} className="h-2" />
-                </div>
-              )}
+{/* Analyze Button */}
+<Button 
+  onClick={analyzeCrop}
+  disabled={!selectedImage || isAnalyzing}
+  className="w-full bg-warning hover:bg-warning/90 mt-2"
+>
+  {isAnalyzing ? (
+    <>
+      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+      Analyzing...
+    </>
+  ) : (
+    <>
+      <Scan className="w-4 h-4 mr-2" />
+      Analyze Crop Health
+    </>
+  )}
+</Button>
+
+{/* Analysis Progress */}
+{isAnalyzing && (
+  <div className="space-y-2">
+    <div className="flex justify-between text-sm">
+      <span>Analysis Progress</span>
+      <span>{confidence}%</span>
+    </div>
+    <Progress value={confidence} className="h-2" />
+  </div>
+)}
             </CardContent>
           </Card>
 
