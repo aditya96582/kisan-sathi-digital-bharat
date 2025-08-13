@@ -21,31 +21,31 @@ export default function Layout() {
               </Button>
               <Button asChild variant="nav" size="sm" className="group">
                 <Link to="/voice" className="flex items-center gap-2">
-                  <Mic className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  <Mic className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
                   Voice
                 </Link>
               </Button>
               <Button asChild variant="nav" size="sm" className="group">
                 <Link to="/prices" className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  <TrendingUp className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
                   Prices
                 </Link>
               </Button>
               <Button asChild variant="nav" size="sm" className="group">
                 <Link to="/weather" className="flex items-center gap-2">
-                  <Cloud className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  <Cloud className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
                   Weather
                 </Link>
               </Button>
               <Button asChild variant="nav" size="sm" className="group">
                 <Link to="/terrasense-lab" className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  <Shield className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
                   TerraSense
                 </Link>
               </Button>
               <Button asChild variant="nav" size="sm" className="group">
                 <Link to="/ai-insights" className="flex items-center gap-2">
-                  <Globe className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  <Globe className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
                   AI
                 </Link>
               </Button>
@@ -53,7 +53,7 @@ export default function Layout() {
             <div className="flex items-center gap-2">
               <Button asChild size="sm" variant="nav" className="group">
                 <Link to="/voice" className="flex items-center gap-2">
-                  <Mic className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  <Mic className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
                   Start Talking
                 </Link>
               </Button>
