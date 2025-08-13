@@ -21,7 +21,7 @@ export default function Layout() {
               </Button>
               <Button asChild variant="nav" size="sm">
                 <Link to="/voice" className="group flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                  <span className="w-6 h-6 rounded-md bg-background border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
                     <Mic className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
                   </span>
                   Voice
@@ -29,7 +29,7 @@ export default function Layout() {
               </Button>
               <Button asChild variant="nav" size="sm">
                 <Link to="/prices" className="group flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                  <span className="w-6 h-6 rounded-md bg-background border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
                     <TrendingUp className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
                   </span>
                   Prices
@@ -37,7 +37,7 @@ export default function Layout() {
               </Button>
               <Button asChild variant="nav" size="sm">
                 <Link to="/weather" className="group flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                  <span className="w-6 h-6 rounded-md bg-background border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
                     <Cloud className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
                   </span>
                   Weather
@@ -45,7 +45,7 @@ export default function Layout() {
               </Button>
               <Button asChild variant="nav" size="sm">
                 <Link to="/terrasense-lab" className="group flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                  <span className="w-6 h-6 rounded-md bg-background border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
                     <Shield className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
                   </span>
                   TerraSense
@@ -53,7 +53,7 @@ export default function Layout() {
               </Button>
               <Button asChild variant="nav" size="sm">
                 <Link to="/ai-insights" className="group flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                  <span className="w-6 h-6 rounded-md bg-background border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
                     <Globe className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
                   </span>
                   AI
@@ -63,7 +63,7 @@ export default function Layout() {
             <div className="flex items-center gap-2">
               <Button asChild size="sm" variant="nav">
                 <Link to="/voice" className="group flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                  <span className="w-6 h-6 rounded-md bg-background border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
                     <Mic className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
                   </span>
                   Start Talking
