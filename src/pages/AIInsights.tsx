@@ -128,6 +128,40 @@ export default function AIInsights() {
     },
   });
 
+  useEffect(() => {
+    if (data) setFetchedAt(new Date());
+  }, [data]);
+
+  useEffect(() => {
+    const market = (data as any)?.market;
+    if (!market) return;
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: `${crop} market advisory for ${state}`,
+      about: ["agriculture", "market prices", crop, state],
+      datePublished: new Date().toISOString(),
+      description: Array.isArray(market?.advice) ? market.advice.join("; ").slice(0, 160) : "AI-generated market advisory."
+    };
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.text = JSON.stringify(jsonLd);
+    document.head.appendChild(script);
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, [data, crop, state]);
+
+  const copyLink = async () => {
+    updateUrl();
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({ title: "Link copied", description: "Share this AI insight with others." });
+    } catch {
+      toast({ title: "Copy failed", description: "Could not copy link." });
+    }
+  };
+
   const onSearch = async () => {
     setBypassCache(false);
     const res = await refetch();
@@ -165,46 +199,7 @@ export default function AIInsights() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-3">
-                <div className="space-y-2">
-                  <Label htmlFor="crop">Crop</Label>
-                  <div className="flex gap-2">
-                    <Select value={crop} onValueChange={setCrop}>
-                      <SelectTrigger id="crop">
-                        <SelectValue placeholder="Select crop" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {CROPS.map((c) => (
-                          <SelectItem key={c} value={c}>{c}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Input
-                      placeholder="Or type crop"
-                      value={crop}
-                      onChange={(e) => setCrop(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="state">State/Region</Label>
-                  <Select value={state} onValueChange={setState}>
-                    <SelectTrigger id="state">
-                      <SelectValue placeholder="Select state" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {STATES.map((s) => (
-                        <SelectItem key={s} value={s}>{s}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex items-end gap-2">
-                  <Button onClick={onSearch} disabled={isLoading || isFetching}>Get Insights</Button>
-                  <Button variant="outline" onClick={onRefresh} disabled={isFetching}>
-                    <RefreshCcw className="w-4 h-4 mr-2" /> Refresh
-                  </Button>
+...
                 </div>
               </div>
             </CardContent>
