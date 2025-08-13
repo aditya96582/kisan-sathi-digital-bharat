@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { RefreshCcw, TrendingUp, Factory, Ship, Info } from "lucide-react";
+import { RefreshCcw, TrendingUp, Factory, Ship, Info, Share2 } from "lucide-react";
 
 // Lightweight SEO helper (no extra deps)
 function useSEO(title: string, description: string, path: string) {
@@ -61,6 +61,23 @@ export default function AIInsights() {
   const [crop, setCrop] = useState<string>("wheat");
   const [state, setState] = useState<string>("All India");
   const [bypassCache, setBypassCache] = useState(false);
+  const [fetchedAt, setFetchedAt] = useState<Date | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const c = params.get("crop");
+    const s = params.get("state");
+    if (c) setCrop(c);
+    if (s) setState(s);
+  }, []);
+
+  const updateUrl = () => {
+    const params = new URLSearchParams();
+    params.set("crop", crop);
+    params.set("state", state);
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState({}, "", newUrl);
+  };
 
   const queryKey = useMemo(() => ["ai-insights", crop, state, bypassCache], [crop, state, bypassCache]);
 
@@ -114,6 +131,7 @@ export default function AIInsights() {
   const onSearch = async () => {
     setBypassCache(false);
     const res = await refetch();
+    updateUrl();
     if (res.data?.fromCache) {
       toast({ title: "Loaded from cache", description: "Showing recent insights from cache (under 6 hours)." });
     } else {
@@ -124,6 +142,7 @@ export default function AIInsights() {
   const onRefresh = async () => {
     setBypassCache(true);
     const res = await refetch();
+    updateUrl();
     if (!res.error) toast({ title: "Refreshed", description: "Fetched fresh AI insights (cache bypassed)." });
     setBypassCache(false);
   };
