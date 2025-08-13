@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Mic, MicOff, Volume2, VolumeX, ArrowLeft, MessageCircle, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 const VoiceAssistant = () => {
   const [isListening, setIsListening] = useState(false);
@@ -14,6 +16,28 @@ const VoiceAssistant = () => {
   const [transcript, setTranscript] = useState("");
   const [response, setResponse] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const detectedLangRef = useRef<string>("");
+
+  const bcp47Map: Record<string, string> = {
+    hi: "hi-IN", ta: "ta-IN", te: "te-IN", bn: "bn-IN", mr: "mr-IN", gu: "gu-IN",
+    kn: "kn-IN", ml: "ml-IN", pa: "pa-IN", or: "or-IN", as: "as-IN", ur: "ur-IN",
+    en: "en-US",
+  };
+
+  const getVoiceForLang = (langCode: string) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return null;
+    const voices = window.speechSynthesis.getVoices();
+    const v = voices.find(v => v.lang.toLowerCase().startsWith(langCode.toLowerCase()));
+    return v || voices.find(v => v.lang.toLowerCase().startsWith('en')) || null;
+  };
+
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      // Warm up voices
+      window.speechSynthesis.getVoices();
+    }
+  }, []);
 
   const languages = [
     { code: "hi", name: "हिन्दी (Hindi)", sample: "नमस्ते! मैं आपकी खेती में कैसे मदद कर सकता हूं?" },
@@ -52,48 +76,103 @@ const VoiceAssistant = () => {
     "बेहतर कीमत के लिए मंडी जाने से पहले कीमतों की जांच करें। गुणवत्ता बनाए रखें। सही समय पर बेचें और अगर संभव हो तो सीधे खरीदारों से संपर्क करें।"
   ];
 
-  // Mock Speech Recognition
+  // Real Speech Recognition with auto language detection
   const startListening = () => {
-    if (!isListening) {
-      setIsListening(true);
-      setTranscript("");
-      toast.success(`Voice listening started in ${languages.find(l => l.code === currentLanguage)?.name}`);
-      
-      // Simulate speech recognition
-      setTimeout(() => {
-        const randomQuestion = sampleQuestions[Math.floor(Math.random() * sampleQuestions.length)];
-        setTranscript(randomQuestion);
-        setIsListening(false);
-        processVoiceInput(randomQuestion);
-      }, 3000);
+    if (isListening) return;
+    const SR: any = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    if (!SR) {
+      toast.error("Your browser doesn't support voice input. Try Chrome.");
+      return;
     }
+    setTranscript("");
+    setResponse("");
+
+    const recog = new SR();
+    recognitionRef.current = recog;
+    const initialLang = navigator.language || "en-US";
+    recog.lang = initialLang;
+    recog.continuous = false;
+    recog.interimResults = true;
+
+    setIsListening(true);
+    toast.success("Listening...");
+
+    let finalText = "";
+
+    recog.onresult = (e: any) => {
+      let interim = "";
+      for (let i = e.resultIndex; i < e.results.length; ++i) {
+        const chunk = e.results[i][0].transcript;
+        if (e.results[i].isFinal) finalText += chunk + " ";
+        else interim += chunk;
+      }
+      setTranscript((finalText || interim).trim());
+    };
+
+    recog.onerror = () => {
+      setIsListening(false);
+    };
+
+    recog.onend = async () => {
+      setIsListening(false);
+      const text = finalText.trim() || transcript.trim();
+      if (text) {
+        await processVoiceInput(text);
+      } else {
+        toast.info("No speech detected, please try again");
+      }
+    };
+
+    try { recog.start(); } catch {}
   };
 
   const stopListening = () => {
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch {}
+    }
     setIsListening(false);
     toast.info("Voice listening stopped");
   };
 
   const processVoiceInput = async (input: string) => {
     setIsProcessing(true);
-    
-    // Simulate AI processing
-    setTimeout(() => {
-      const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
-      setResponse(randomResponse);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-generate", {
+        body: {
+          query: input,
+          section: "Voice Assistant",
+          userLocale: navigator.language,
+        },
+      });
+      if (error) throw error;
+
+      const answer = data?.answer || "";
+      const lang = (data?.language as string) || navigator.language || "en-US";
+
+      setResponse(answer);
+      // Update currentLanguage for UI dropdown
+      const base = lang.split("-")[0];
+      setCurrentLanguage(base);
+      detectedLangRef.current = lang;
+
+      speakResponse(answer, lang);
+    } catch (e: any) {
+      console.error(e);
+      toast.error("AI error. Please try again.");
+    } finally {
       setIsProcessing(false);
-      
-      // Auto-speak the response
-      speakResponse(randomResponse);
-    }, 2000);
+    }
   };
 
-  const speakResponse = (text: string) => {
+  const speakResponse = (text: string, langOverride?: string) => {
     if ('speechSynthesis' in window) {
       setIsSpeaking(true);
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-US';
-      utterance.rate = 0.8;
+      const lang = (langOverride || bcp47Map[currentLanguage] || navigator.language || 'en-US');
+      utterance.lang = lang;
+      const voice = getVoiceForLang(lang);
+      if (voice) utterance.voice = voice;
+      utterance.rate = 0.95;
       utterance.pitch = 1;
       
       utterance.onend = () => {
@@ -120,6 +199,10 @@ const VoiceAssistant = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-info/5">
+      <SEO
+        title="Voice Assistant | Smart Bharat"
+        description="Multilingual AI farm assistant powered by Gemini. Speak or type and get precise answers."
+      />
       {/* Header */}
       <header className="border-b bg-background/80 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
