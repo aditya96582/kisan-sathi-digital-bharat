@@ -18,8 +18,8 @@ serve(async (req) => {
   }
 
   try {
-    const { image, lat, lon, userId } = await req.json();
-    
+    const { image, lat, lon } = await req.json();
+
     if (!image) {
       return new Response(
         JSON.stringify({ error: 'Image data is required' }),
@@ -35,10 +35,21 @@ serve(async (req) => {
       );
     }
 
+    // Create a request-scoped Supabase client to forward auth from the caller
+    const supabaseReq = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: req.headers.get('Authorization') ?? '' } } }
+    );
+
+    // Identify user (if signed in)
+    const { data: authData } = await supabaseReq.auth.getUser();
+    const effectiveUserId = authData?.user?.id ?? null;
+
     // Get weather data for context
     let weatherContext = '';
     if (lat && lon) {
-      const { data: weatherData } = await supabase
+      const { data: weatherData } = await supabaseReq
         .from('weather_data')
         .select('*')
         .eq('location_lat', lat)
@@ -171,9 +182,9 @@ serve(async (req) => {
       };
     }
 
-    // Store analysis result in database
+    // Store analysis result in database (only for signed-in users due to RLS)
     const cropAnalysisData = {
-      user_id: userId,
+      user_id: effectiveUserId,
       image_url: image,
       analysis_result: analysisResult,
       crop_health_status: analysisResult.health_status,
@@ -184,12 +195,15 @@ serve(async (req) => {
       location_lon: lon,
     };
 
-    const { error: insertError } = await supabase
-      .from('crop_analysis')
-      .insert(cropAnalysisData);
-
-    if (insertError) {
-      console.error('Error storing crop analysis:', insertError);
+    if (effectiveUserId) {
+      const { error: insertError } = await supabaseReq
+        .from('crop_analysis')
+        .insert(cropAnalysisData);
+      if (insertError) {
+        console.error('Error storing crop analysis:', insertError);
+      }
+    } else {
+      console.log('Anonymous analysis request – skipping crop_analysis insert due to RLS.');
     }
 
     // Generate notifications based on analysis
@@ -197,7 +211,7 @@ serve(async (req) => {
     
     if (notifications.length > 0) {
       const notificationEntries = notifications.map((notification: any) => ({
-        user_id: userId,
+        user_id: effectiveUserId,
         notification_type: notification.type,
         title: notification.title,
         message: notification.message,
@@ -206,7 +220,7 @@ serve(async (req) => {
         location_lon: lon,
       }));
 
-      const { error: notificationError } = await supabase
+      const { error: notificationError } = await supabaseReq
         .from('weather_notifications')
         .insert(notificationEntries);
 
