@@ -16,14 +16,61 @@ import {
   Coins
 } from "lucide-react";
 import { Link } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 const Dashboard = () => {
+  const [priceValue, setPriceValue] = useState("₹—/quintal");
+  const [priceChange, setPriceChange] = useState("");
+  const [alertsCount, setAlertsCount] = useState(0);
+
   const quickStats = [
-    { label: "Today's Mandi Price", value: "₹2,450/quintal", change: "+5.2%", icon: TrendingUp },
+    { label: "Today's Mandi Price", value: priceValue, change: priceChange || "", icon: TrendingUp },
     { label: "Active Farmers", value: "12,847", change: "+8.1%", icon: Users },
     { label: "Game Tokens Earned", value: "2,350", change: "+15%", icon: Award },
-    { label: "Pending Alerts", value: "3", change: "New", icon: Bell }
+    { label: "Pending Alerts", value: String(alertsCount), change: "New", icon: Bell }
   ];
+
+  useEffect(() => {
+    // Basic SEO
+    document.title = "Smart Bharat Dashboard – AI Farm Status";
+    const existing = document.querySelector("link[rel='canonical']") as HTMLLinkElement | null;
+    const link = existing || document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    link.setAttribute('href', window.location.href);
+    if (!existing) document.head.appendChild(link);
+
+    const fetchAdvisory = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('ai-market-advisory', {
+          body: { crop: 'wheat', state: 'All India' }
+        });
+        if (!error) {
+          const pb = data?.advisory?.price_band;
+          if (pb?.min && pb?.max) setPriceValue(`₹${pb.min}–₹${pb.max}/quintal`);
+          const trend = data?.advisory?.trend;
+          setPriceChange(trend ? trend : "");
+        }
+      } catch (e) {
+        console.warn('Advisory fetch failed', e);
+      }
+    };
+
+    const fetchAlerts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('weather_notifications')
+          .select('id')
+          .order('created_at', { ascending: false })
+          .limit(50);
+        if (!error && data) setAlertsCount(data.length);
+      } catch (e) {
+        console.warn('Alerts fetch failed', e);
+      }
+    };
+
+    fetchAdvisory();
+    fetchAlerts();
+  }, []);
 
   const recentActivities = [
     { action: "Crop Health Scan", crop: "Wheat", result: "Healthy", time: "2 hours ago" },

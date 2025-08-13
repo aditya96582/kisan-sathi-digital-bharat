@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +28,15 @@ const CropCalendar = () => {
   const [selectedRegion, setSelectedRegion] = useState("uttar-pradesh");
   const [aiLoading, setAiLoading] = useState(false);
   const [aiCalendar, setAiCalendar] = useState<any>(null);
+
+  useEffect(() => {
+    document.title = "AI Crop Calendar & Reminders – Smart Bharat";
+    const existing = document.querySelector("link[rel='canonical']") as HTMLLinkElement | null;
+    const link = existing || document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    link.setAttribute('href', window.location.href);
+    if (!existing) document.head.appendChild(link);
+  }, []);
 
   const crops = [
     { value: "wheat", label: "गेहूं (Wheat)" },
