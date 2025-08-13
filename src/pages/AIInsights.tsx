@@ -199,7 +199,52 @@ export default function AIInsights() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-3">
-...
+                <div className="space-y-2">
+                  <Label htmlFor="crop">Crop</Label>
+                  <div className="flex gap-2">
+                    <Select value={crop} onValueChange={setCrop}>
+                      <SelectTrigger id="crop">
+                        <SelectValue placeholder="Select crop" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CROPS.map((c) => (
+                          <SelectItem key={c} value={c}>{c}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      placeholder="Or type crop"
+                      value={crop}
+                      onChange={(e) => setCrop(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="state">State/Region</Label>
+                  <Select value={state} onValueChange={setState}>
+                    <SelectTrigger id="state">
+                      <SelectValue placeholder="Select state" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {STATES.map((s) => (
+                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex items-end gap-2 flex-wrap">
+                  <Button onClick={onSearch} disabled={isLoading || isFetching}>Get Insights</Button>
+                  <Button variant="outline" onClick={onRefresh} disabled={isFetching}>
+                    <RefreshCcw className="w-4 h-4 mr-2" /> Refresh
+                  </Button>
+                  <Button variant="ghost" onClick={copyLink}>
+                    <Share2 className="w-4 h-4 mr-2" /> Copy Link
+                  </Button>
+                  {fetchedAt && (
+                    <span className="text-xs text-muted-foreground ml-2">Last updated: {fetchedAt.toLocaleTimeString()}</span>
+                  )}
                 </div>
               </div>
             </CardContent>
