@@ -8,6 +8,25 @@ import { ArrowLeft, TrendingUp, TrendingDown, Search, MapPin, Clock, RefreshCw }
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
+function stripCodeFences(text: string) {
+  return text
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/```\s*$/i, "")
+    .trim();
+}
+
+function cleanMaybeJson(input: any) {
+  if (input == null) return input;
+  if (typeof input === "string") {
+    try { return JSON.parse(stripCodeFences(input)); } catch { return input; }
+  }
+  if (typeof (input as any)?.raw === "string") {
+    try { return JSON.parse(stripCodeFences((input as any).raw)); } catch { return input; }
+  }
+  return input;
+}
+
 const MandiPrices = () => {
   const [selectedState, setSelectedState] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -249,7 +268,9 @@ const MandiPrices = () => {
         body: { crop, state: stateName },
       });
       if (error) throw error as any;
-      setAiAdvisory(data?.advisory || data);
+      const raw = (data as any)?.advisory ?? data;
+      const cleaned = cleanMaybeJson(raw);
+      setAiAdvisory(cleaned);
     } catch (e) {
       console.error('AI advisory error', e);
       setAiAdvisory({ error: 'Unable to fetch AI advisory at the moment.' });

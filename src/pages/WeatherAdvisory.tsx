@@ -146,10 +146,11 @@ const WeatherAdvisory = () => {
 
       if (error) throw error;
 
-      setImageAnalysis(data.analysis);
+      setImageAnalysis(data.analysis || data);
+      const c = data?.analysis?.confidence_level ?? data?.confidence ?? 100;
       toast({
         title: 'Analysis Complete',
-        description: `Crop analysis completed with ${data.confidence}% confidence.`,
+        description: `Crop analysis completed with ${c}% confidence.`,
       });
 
       // Reload notifications to get new analysis alerts
