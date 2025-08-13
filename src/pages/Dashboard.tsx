@@ -319,10 +319,10 @@ const Dashboard = () => {
                 )}
               </CardContent>
             </Card>
-          </div>{/* end sidebar */}
-        </div>{/* end main grid */}
-      </div>{/* end container */}
-    </div>{/* end page wrapper */}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
