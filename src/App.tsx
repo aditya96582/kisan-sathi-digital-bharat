@@ -16,6 +16,11 @@ import CropCalendar from "./pages/CropCalendar";
 import SubsidyFinder from "./pages/SubsidyFinder";
 import AIInsights from "./pages/AIInsights";
 import NotFound from "./pages/NotFound";
+import AgriMindAI from "./pages/AgriMindAI";
+import TerraSenseLab from "./pages/TerraSenseLab";
+import HydroSmart from "./pages/HydroSmart";
+import MandiPulse from "./pages/MandiPulse";
+import KrishiFin from "./pages/KrishiFin";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +43,11 @@ const App = () => (
           <Route path="/crop-calendar" element={<CropCalendar />} />
           <Route path="/subsidy-finder" element={<SubsidyFinder />} />
           <Route path="/ai-insights" element={<AIInsights />} />
+          <Route path="/agrimind-ai" element={<AgriMindAI />} />
+          <Route path="/terrasense-lab" element={<TerraSenseLab />} />
+          <Route path="/hydrosmart" element={<HydroSmart />} />
+          <Route path="/mandipulse" element={<MandiPulse />} />
+          <Route path="/krishifin" element={<KrishiFin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

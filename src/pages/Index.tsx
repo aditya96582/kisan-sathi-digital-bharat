@@ -120,8 +120,20 @@ const Index = () => {
               <Link to="/ai-insights" className="text-muted-foreground hover:text-primary transition-colors">
                 AI Insights
               </Link>
-              <Link to="/agri-game" className="text-muted-foreground hover:text-primary transition-colors">
-                Games
+              <Link to="/agrimind-ai" className="text-muted-foreground hover:text-primary transition-colors">
+                AgriMind AI
+              </Link>
+              <Link to="/terrasense-lab" className="text-muted-foreground hover:text-primary transition-colors">
+                TerraSense
+              </Link>
+              <Link to="/hydrosmart" className="text-muted-foreground hover:text-primary transition-colors">
+                HydroSmart
+              </Link>
+              <Link to="/mandipulse" className="text-muted-foreground hover:text-primary transition-colors">
+                MandiPulse
+              </Link>
+              <Link to="/krishifin" className="text-muted-foreground hover:text-primary transition-colors">
+                KrishiFin
               </Link>
             </nav>
           </div>
