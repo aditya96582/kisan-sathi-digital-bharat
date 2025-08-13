@@ -14,6 +14,7 @@ const CropHealth = () => {
   const [confidence, setConfidence] = useState(0);
   const [mode, setMode] = useState<'online' | 'offline'>('online');
   const [currentLocation, setCurrentLocation] = useState<{ lat: number; lon: number }>({ lat: 28.6139, lon: 77.209 });
+  const [advisories, setAdvisories] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -118,6 +119,23 @@ const analyzeCrop = async () => {
     setAnalysisResult(data.analysis || data);
     const c = data?.analysis?.confidence_level ?? data?.confidence ?? 100;
     setConfidence(typeof c === 'number' ? Math.min(100, c) : 100);
+
+    // Fetch AI advisories based on detected crop
+    try {
+      const cropName = data?.analysis?.crop_type || data?.crop_type || data?.analysis?.name || 'wheat';
+      const { data: advData, error: advError } = await supabase.functions.invoke('ai-crop-advisories', {
+        body: { crop: cropName, region: 'india' }
+      });
+      if (!advError) {
+        setAdvisories(advData?.advisories || null);
+        try {
+          localStorage.setItem('lastCropAdvisories', JSON.stringify({ crop: cropName, ...advData }));
+        } catch {}
+      }
+    } catch (e) {
+      console.warn('Advisories generation failed', e);
+    }
+
     toast.success("Analysis complete!");
   } catch (err) {
     console.error('Analysis error', err);
@@ -353,6 +371,61 @@ const analyzeCrop = async () => {
                       <p className="text-sm">{analysisResult.prevention}</p>
                     </div>
                   </div>
+
+                  {/* AI Advisories */}
+                  {advisories && (
+                    <div className="space-y-4">
+                      <h4 className="font-semibold">AI Advisories</h4>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {/* AgriMind AI */}
+                        <div className="border rounded-lg p-4 bg-muted/30">
+                          <h5 className="font-medium mb-1">AgriMind AI – Seasonal Demand</h5>
+                          <p className="text-sm text-muted-foreground mb-2">{advisories.agrimind_ai?.seasonal_crop_demand_prediction}</p>
+                          {advisories.agrimind_ai?.risk_factors && (
+                            <ul className="text-sm list-disc pl-5 space-y-1">
+                              {advisories.agrimind_ai.risk_factors.map((r: string, i: number) => (<li key={i}>{r}</li>))}
+                            </ul>
+                          )}
+                        </div>
+
+                        {/* AgriPredict */}
+                        <div className="border rounded-lg p-4 bg-muted/30">
+                          <h5 className="font-medium mb-1">AgriPredict – Export Advisory</h5>
+                          <p className="text-xs text-muted-foreground mb-1">Trend: {advisories.agripredict?.price_trend}</p>
+                          {advisories.agripredict?.export_markets && (
+                            <ul className="text-sm list-disc pl-5 space-y-1">
+                              {advisories.agripredict.export_markets.slice(0,3).map((m: any, i: number) => (
+                                <li key={i}>{m.country} • {m.demand_level}</li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+
+                        {/* SeedSense AI */}
+                        <div className="border rounded-lg p-4 bg-muted/30">
+                          <h5 className="font-medium mb-1">SeedSense AI – Seeds & Fertilizer</h5>
+                          {advisories.seedsense_ai?.seed_varieties && (
+                            <div className="text-sm mb-2">
+                              <span className="font-medium">Varieties: </span>
+                              {advisories.seedsense_ai.seed_varieties.map((v: any) => v.name).join(', ')}
+                            </div>
+                          )}
+                          {advisories.seedsense_ai?.fertilizer_plan?.basal && (
+                            <div className="text-sm text-muted-foreground">
+                              Basal: {advisories.seedsense_ai.fertilizer_plan.basal.product} • {advisories.seedsense_ai.fertilizer_plan.basal.dose_per_acre}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* FarmSage */}
+                        <div className="border rounded-lg p-4 bg-muted/30">
+                          <h5 className="font-medium mb-1">FarmSage – Demand Forecast</h5>
+                          <p className="text-sm text-muted-foreground mb-1">Local: {advisories.farmsage?.local_demand_forecast}</p>
+                          <p className="text-sm text-muted-foreground">Export: {advisories.farmsage?.export_demand_forecast}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Action Buttons */}
                   <div className="grid grid-cols-2 gap-4">

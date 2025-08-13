@@ -5,3 +5,12 @@ verify_jwt = false
 
 [functions.gemini-crop-analysis]
 verify_jwt = false
+
+[functions.ai-crop-calendar]
+verify_jwt = false
+
+[functions.ai-crop-advisories]
+verify_jwt = false
+
+[functions.ai-market-advisory]
+verify_jwt = false
