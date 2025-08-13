@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_insights_cache: {
+        Row: {
+          created_at: string
+          crop: string
+          crop_advisories: Json | null
+          id: string
+          market_advisory: Json | null
+          state: string
+        }
+        Insert: {
+          created_at?: string
+          crop: string
+          crop_advisories?: Json | null
+          id?: string
+          market_advisory?: Json | null
+          state: string
+        }
+        Update: {
+          created_at?: string
+          crop?: string
+          crop_advisories?: Json | null
+          id?: string
+          market_advisory?: Json | null
+          state?: string
+        }
+        Relationships: []
+      }
       crop_analysis: {
         Row: {
           analysis_result: Json | null

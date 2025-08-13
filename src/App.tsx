@@ -14,6 +14,7 @@ import EPass from "./pages/EPass";
 import BlockchainTracking from "./pages/BlockchainTracking";
 import CropCalendar from "./pages/CropCalendar";
 import SubsidyFinder from "./pages/SubsidyFinder";
+import AIInsights from "./pages/AIInsights";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/blockchain-tracking" element={<BlockchainTracking />} />
           <Route path="/crop-calendar" element={<CropCalendar />} />
           <Route path="/subsidy-finder" element={<SubsidyFinder />} />
+          <Route path="/ai-insights" element={<AIInsights />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

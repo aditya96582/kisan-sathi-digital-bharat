@@ -117,6 +117,9 @@ const Index = () => {
               <Link to="/prices" className="text-muted-foreground hover:text-primary transition-colors">
                 Mandi Prices
               </Link>
+              <Link to="/ai-insights" className="text-muted-foreground hover:text-primary transition-colors">
+                AI Insights
+              </Link>
               <Link to="/agri-game" className="text-muted-foreground hover:text-primary transition-colors">
                 Games
               </Link>
