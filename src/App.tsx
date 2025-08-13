@@ -21,6 +21,7 @@ import TerraSenseLab from "./pages/TerraSenseLab";
 import HydroSmart from "./pages/HydroSmart";
 import MandiPulse from "./pages/MandiPulse";
 import KrishiFin from "./pages/KrishiFin";
+import WhatsAppButton from "./components/WhatsAppButton";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <WhatsAppButton />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

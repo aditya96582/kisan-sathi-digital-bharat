@@ -165,10 +165,10 @@ const Index = () => {
                 Go to Dashboard
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20 backdrop-blur-sm">
-              <Link to="/agri-game" className="flex items-center gap-2">
-                <GamepadIcon className="w-5 h-5" />
-                Play & Learn
+            <Button size="lg" variant="secondary">
+              <Link to="/voice" className="flex items-center gap-2">
+                <Mic className="w-5 h-5" />
+                Voice Assistant
               </Link>
             </Button>
           </div>
