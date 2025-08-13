@@ -16,44 +16,56 @@ export default function Layout() {
               <span className="text-lg font-semibold">Smart Bharat</span>
             </Link>
             <nav className="hidden md:flex items-center gap-3">
-              <Button asChild variant="nav" size="sm" className="group">
-                <Link to="/dashboard" className="flex items-center gap-2">Dashboard</Link>
+              <Button asChild variant="nav" size="sm">
+                <Link to="/dashboard" className="group flex items-center gap-2">Dashboard</Link>
               </Button>
-              <Button asChild variant="nav" size="sm" className="group">
-                <Link to="/voice" className="flex items-center gap-2">
-                  <Mic className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
+              <Button asChild variant="nav" size="sm">
+                <Link to="/voice" className="group flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                    <Mic className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
+                  </span>
                   Voice
                 </Link>
               </Button>
-              <Button asChild variant="nav" size="sm" className="group">
-                <Link to="/prices" className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
+              <Button asChild variant="nav" size="sm">
+                <Link to="/prices" className="group flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                    <TrendingUp className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
+                  </span>
                   Prices
                 </Link>
               </Button>
-              <Button asChild variant="nav" size="sm" className="group">
-                <Link to="/weather" className="flex items-center gap-2">
-                  <Cloud className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
+              <Button asChild variant="nav" size="sm">
+                <Link to="/weather" className="group flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                    <Cloud className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
+                  </span>
                   Weather
                 </Link>
               </Button>
-              <Button asChild variant="nav" size="sm" className="group">
-                <Link to="/terrasense-lab" className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
+              <Button asChild variant="nav" size="sm">
+                <Link to="/terrasense-lab" className="group flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                    <Shield className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
+                  </span>
                   TerraSense
                 </Link>
               </Button>
-              <Button asChild variant="nav" size="sm" className="group">
-                <Link to="/ai-insights" className="flex items-center gap-2">
-                  <Globe className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
+              <Button asChild variant="nav" size="sm">
+                <Link to="/ai-insights" className="group flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                    <Globe className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
+                  </span>
                   AI
                 </Link>
               </Button>
             </nav>
             <div className="flex items-center gap-2">
-              <Button asChild size="sm" variant="nav" className="group">
-                <Link to="/voice" className="flex items-center gap-2">
-                  <Mic className="w-4 h-4 transition-all duration-200 group-hover:scale-110 group-hover:text-primary group-hover:drop-shadow-md" />
+              <Button asChild size="sm" variant="nav">
+                <Link to="/voice" className="group flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-md bg-card border border-border grid place-items-center shadow-sm transition-all duration-200 group-hover:shadow-md">
+                    <Mic className="w-4 h-4 transition-all duration-200 text-muted-foreground group-hover:text-primary group-hover:scale-110" />
+                  </span>
                   Start Talking
                 </Link>
               </Button>
