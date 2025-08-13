@@ -95,58 +95,21 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-info/5">
-      {/* Header */}
-      <header className="border-b bg-background/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">SB</span>
-              </div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-info bg-clip-text text-transparent">
-                Smart Bharat
-              </h1>
-            </div>
-            <nav className="hidden md:flex space-x-6">
-              <Link to="/dashboard" className="text-muted-foreground hover:text-primary transition-colors">
-                Dashboard
-              </Link>
-              <Link to="/voice" className="text-muted-foreground hover:text-primary transition-colors">
-                Voice Assistant
-              </Link>
-              <Link to="/prices" className="text-muted-foreground hover:text-primary transition-colors">
-                Mandi Prices
-              </Link>
-              <Link to="/ai-insights" className="text-muted-foreground hover:text-primary transition-colors">
-                AI Insights
-              </Link>
-              <Link to="/agrimind-ai" className="text-muted-foreground hover:text-primary transition-colors">
-                AgriMind AI
-              </Link>
-              <Link to="/terrasense-lab" className="text-muted-foreground hover:text-primary transition-colors">
-                TerraSense
-              </Link>
-              <Link to="/hydrosmart" className="text-muted-foreground hover:text-primary transition-colors">
-                HydroSmart
-              </Link>
-              <Link to="/mandipulse" className="text-muted-foreground hover:text-primary transition-colors">
-                MandiPulse
-              </Link>
-              <Link to="/krishifin" className="text-muted-foreground hover:text-primary transition-colors">
-                KrishiFin
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+{/* Header moved to global Layout */}
 
       {/* Hero Section */}
       <section className="relative py-20 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10"></div>
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        ></div>
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/60 to-black/40"></div>
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/videos/hero.mp4"
+          poster={heroImage}
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-label="Fields and farms of India"
+        />
         <div className="container mx-auto text-center relative z-20">
           <Badge className="mb-4 bg-primary/20 text-white border-primary/30 backdrop-blur-sm">
             🚀 Smart Bharat Innovation Project
@@ -243,29 +206,7 @@ const Index = () => {
       </section>
 
 
-      {/* Footer */}
-      <footer className="py-12 px-4 bg-gray-50 border-t">
-        <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">SB</span>
-            </div>
-            <h3 className="text-xl font-bold bg-gradient-to-r from-primary to-info bg-clip-text text-transparent">
-              Smart Bharat Innovation
-            </h3>
-          </div>
-          <p className="text-muted-foreground mb-6">
-            Empowering farmers through technology • Built with ❤️ for Digital India
-          </p>
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-            <span>© 2024 Smart Bharat Innovation Project</span>
-            <span>•</span>
-            <span>Made in India</span>
-            <span>•</span>
-            <span>For Farmers, By Technology</span>
-          </div>
-        </div>
-      </footer>
+{/* Footer moved to global Layout */}
     </div>
   );
 };

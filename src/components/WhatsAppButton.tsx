@@ -25,9 +25,9 @@ export default function WhatsAppButton({
       target="_blank"
       rel="noreferrer"
       aria-label="Chat on WhatsApp"
-      className="fixed bottom-5 right-5 z-50 group"
+      className="fixed bottom-5 right-5 z-50 group hover-scale"
     >
-      <div className="rounded-full shadow-lg ring-1 ring-border bg-primary text-primary-foreground w-12 h-12 flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
+      <div className="rounded-full shadow-lg ring-1 ring-border bg-primary text-primary-foreground w-11 h-11 flex items-center justify-center transition-transform duration-200 group-hover:scale-110 shadow-glow">
         {/* WhatsApp glyph (SVG) */}
         <svg width="22" height="22" viewBox="0 0 32 32" fill="currentColor" aria-hidden>
           <path d="M19.11 17.64c-.27-.14-1.57-.77-1.81-.86-.24-.09-.42-.14-.6.14-.18.27-.69.86-.84 1.04-.15.18-.31.2-.58.07-.27-.14-1.13-.42-2.16-1.34-.8-.71-1.34-1.59-1.49-1.86-.16-.27-.02-.42.12-.55.12-.12.27-.31.4-.47.13-.16.18-.27.27-.45.09-.18.04-.34-.02-.48-.06-.14-.6-1.45-.82-1.99-.22-.53-.44-.46-.6-.46-.15 0-.33-.02-.51-.02-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3 0 1.36.99 2.67 1.12 2.85.14.18 1.95 2.98 4.73 4.19.66.29 1.17.46 1.57.59.66.21 1.26.18 1.73.11.53-.08 1.57-.64 1.79-1.26.22-.62.22-1.15.15-1.26-.07-.11-.24-.18-.51-.32z"/>

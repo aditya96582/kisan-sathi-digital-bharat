@@ -22,6 +22,7 @@ import HydroSmart from "./pages/HydroSmart";
 import MandiPulse from "./pages/MandiPulse";
 import KrishiFin from "./pages/KrishiFin";
 import WhatsAppButton from "./components/WhatsAppButton";
+import Layout from "./components/Layout";
 
 const queryClient = new QueryClient();
 
@@ -32,25 +33,26 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/voice" element={<VoiceAssistant />} />
-          <Route path="/prices" element={<MandiPrices />} />
-          <Route path="/crop-health" element={<CropHealth />} />
-          <Route path="/weather" element={<WeatherAdvisory />} />
-          <Route path="/agri-game" element={<AgriGame />} />
-          <Route path="/e-pass" element={<EPass />} />
-          <Route path="/blockchain-tracking" element={<BlockchainTracking />} />
-          <Route path="/crop-calendar" element={<CropCalendar />} />
-          <Route path="/subsidy-finder" element={<SubsidyFinder />} />
-          <Route path="/ai-insights" element={<AIInsights />} />
-          <Route path="/agrimind-ai" element={<AgriMindAI />} />
-          <Route path="/terrasense-lab" element={<TerraSenseLab />} />
-          <Route path="/hydrosmart" element={<HydroSmart />} />
-          <Route path="/mandipulse" element={<MandiPulse />} />
-          <Route path="/krishifin" element={<KrishiFin />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={<Index />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/voice" element={<VoiceAssistant />} />
+            <Route path="/prices" element={<MandiPrices />} />
+            <Route path="/crop-health" element={<CropHealth />} />
+            <Route path="/weather" element={<WeatherAdvisory />} />
+            <Route path="/agri-game" element={<AgriGame />} />
+            <Route path="/e-pass" element={<EPass />} />
+            <Route path="/blockchain-tracking" element={<BlockchainTracking />} />
+            <Route path="/crop-calendar" element={<CropCalendar />} />
+            <Route path="/subsidy-finder" element={<SubsidyFinder />} />
+            <Route path="/ai-insights" element={<AIInsights />} />
+            <Route path="/agrimind-ai" element={<AgriMindAI />} />
+            <Route path="/terrasense-lab" element={<TerraSenseLab />} />
+            <Route path="/hydrosmart" element={<HydroSmart />} />
+            <Route path="/mandipulse" element={<MandiPulse />} />
+            <Route path="/krishifin" element={<KrishiFin />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Routes>
         <WhatsAppButton />
       </BrowserRouter>
