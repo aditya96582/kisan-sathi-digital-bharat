@@ -226,6 +226,35 @@ const MandiPrices = () => {
     }
   };
 
+  useEffect(() => {
+    // Basic SEO for this page
+    document.title = "MarketPulse – Live Mandi Prices & AI Advisory";
+    // Canonical URL for SEO
+    const existing = document.querySelector("link[rel='canonical']") as HTMLLinkElement | null;
+    const link = existing || document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    link.setAttribute('href', window.location.href);
+    if (!existing) document.head.appendChild(link);
+  }, []);
+
+  const getAIAdvisory = async () => {
+    try {
+      setAiLoading(true);
+      const stateName = states.find((s) => s.code === selectedState)?.name || "All India";
+      const crop = searchQuery?.trim() || "wheat";
+      const { data, error } = await supabase.functions.invoke('ai-market-advisory', {
+        body: { crop, state: stateName },
+      });
+      if (error) throw error as any;
+      setAiAdvisory(data?.advisory || data);
+    } catch (e) {
+      console.error('AI advisory error', e);
+      setAiAdvisory({ error: 'Unable to fetch AI advisory at the moment.' });
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-info/5">
       {/* Header */}
@@ -359,27 +388,104 @@ const MandiPrices = () => {
               <CardTitle className="text-lg">Market Insights</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="p-3 bg-success/10 rounded-lg">
-                  <div className="flex items-center space-x-2">
-                    <TrendingUp className="w-4 h-4 text-success" />
-                    <span className="text-sm font-medium">Price Rising</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Wheat and Rice prices are trending upward due to increased demand
-                  </p>
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-xs text-muted-foreground">
+                  AgriPredict · FarmSage (AI-powered market advisory)
                 </div>
-                
-                <div className="p-3 bg-warning/10 rounded-lg">
-                  <div className="flex items-center space-x-2">
-                    <TrendingDown className="w-4 h-4 text-warning" />
-                    <span className="text-sm font-medium">Price Alert</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Cotton prices have dropped by ₹100 per quintal in Maharashtra
-                  </p>
-                </div>
+                <Button size="sm" variant="secondary" onClick={getAIAdvisory} disabled={aiLoading}>
+                  {aiLoading ? 'Analyzing…' : 'Get AI Advisory'}
+                </Button>
               </div>
+
+              {aiAdvisory?.error && (
+                <div className="p-3 rounded-md bg-destructive/10 text-destructive text-sm">
+                  {aiAdvisory.error}
+                </div>
+              )}
+
+              {aiAdvisory && !aiAdvisory.error ? (
+                <div className="space-y-4">
+                  {aiAdvisory.price_band && (
+                    <div className="p-3 bg-primary/5 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm font-medium">Estimated Price Band</div>
+                        <Badge variant="outline">{aiAdvisory?.trend || 'trend'}</Badge>
+                      </div>
+                      <p className="text-lg font-bold mt-1">
+                        ₹{aiAdvisory.price_band.min} – ₹{aiAdvisory.price_band.max} / quintal
+                      </p>
+                    </div>
+                  )}
+
+                  {Array.isArray(aiAdvisory.top_mandis) && aiAdvisory.top_mandis.length > 0 && (
+                    <div>
+                      <div className="text-sm font-medium mb-2">Top Mandis</div>
+                      <div className="grid sm:grid-cols-2 gap-2">
+                        {aiAdvisory.top_mandis.map((m: any, i: number) => (
+                          <div key={i} className="p-3 rounded-md bg-muted/30 text-sm">
+                            <div className="font-medium">{m.name}, {m.state}</div>
+                            {m.notes && <div className="text-muted-foreground">{m.notes}</div>}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {Array.isArray(aiAdvisory.export_opportunities) && aiAdvisory.export_opportunities.length > 0 && (
+                    <div>
+                      <div className="text-sm font-medium mb-2">Export Opportunities</div>
+                      <div className="space-y-2">
+                        {aiAdvisory.export_opportunities.map((e: any, i: number) => (
+                          <div key={i} className="p-3 rounded-md bg-info/10 text-sm">
+                            <div className="font-medium">{e.country} · {e.demand_level?.toUpperCase()}</div>
+                            {e.port && <div className="text-muted-foreground">Port: {e.port}</div>}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {Array.isArray(aiAdvisory.advice) && aiAdvisory.advice.length > 0 && (
+                    <div>
+                      <div className="text-sm font-medium mb-2">AI Advice</div>
+                      <ul className="list-disc pl-5 text-sm space-y-1">
+                        {aiAdvisory.advice.map((t: string, i: number) => (
+                          <li key={i}>{t}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {typeof aiAdvisory.confidence === 'number' && (
+                    <div className="text-xs text-muted-foreground">Confidence: {aiAdvisory.confidence}%</div>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="p-3 bg-success/10 rounded-lg">
+                    <div className="flex items-center space-x-2">
+                      <TrendingUp className="w-4 h-4 text-success" />
+                      <span className="text-sm font-medium">Price Rising</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Wheat and Rice prices are trending upward due to increased demand
+                    </p>
+                  </div>
+                  <div className="p-3 bg-warning/10 rounded-lg">
+                    <div className="flex items-center space-x-2">
+                      <TrendingDown className="w-4 h-4 text-warning" />
+                      <span className="text-sm font-medium">Price Alert</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Cotton prices have dropped by ₹100 per quintal in Maharashtra
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              <p className="text-[11px] text-muted-foreground mt-4">
+                Advisory is AI-generated and for guidance only. Verify with local mandi officials.
+              </p>
             </CardContent>
           </Card>
 
