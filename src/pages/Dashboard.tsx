@@ -22,6 +22,7 @@ const Dashboard = () => {
   const [priceValue, setPriceValue] = useState("₹—/quintal");
   const [priceChange, setPriceChange] = useState("");
   const [alertsCount, setAlertsCount] = useState(0);
+  const [aiTips, setAiTips] = useState<string[]>([]);
 
   const quickStats = [
     { label: "Today's Mandi Price", value: priceValue, change: priceChange || "", icon: TrendingUp },
@@ -49,6 +50,7 @@ const Dashboard = () => {
           if (pb?.min && pb?.max) setPriceValue(`₹${pb.min}–₹${pb.max}/quintal`);
           const trend = data?.advisory?.trend;
           setPriceChange(trend ? trend : "");
+          setAiTips(Array.isArray(data?.advisory?.advice) ? data.advisory.advice : []);
         }
       } catch (e) {
         console.warn('Advisory fetch failed', e);
@@ -281,10 +283,46 @@ const Dashboard = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
-      </div>
-    </div>
+
+            {/* AI Tips */}
+            <Card>
+              <CardHeader>
+                <CardTitle>AI Tips</CardTitle>
+                <CardDescription>AgriMind • AgriPredict • FarmSage</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-xs text-muted-foreground">For crop: wheat</div>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={async () => {
+                      try {
+                        const { data } = await supabase.functions.invoke('ai-market-advisory', { body: { crop: 'wheat', state: 'All India' } });
+                        setAiTips(Array.isArray(data?.advisory?.advice) ? data.advisory.advice : []);
+                      } catch (e) {
+                        console.warn('AI tips refresh failed', e);
+                      }
+                    }}
+                  >
+                    Refresh
+                  </Button>
+                </div>
+                {aiTips && aiTips.length > 0 ? (
+                  <ul className="list-disc pl-5 space-y-1 text-sm">
+                    {aiTips.slice(0, 5).map((t, i) => (
+                      <li key={i}>{t}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-muted-foreground">No tips yet. Click Refresh to fetch AI guidance.</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>{/* end sidebar */}
+        </div>{/* end main grid */}
+      </div>{/* end container */}
+    </div>{/* end page wrapper */}
   );
 };
 
