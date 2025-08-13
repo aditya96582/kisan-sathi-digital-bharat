@@ -25,6 +25,19 @@ async function callGemini(prompt: string) {
   return text;
 }
 
+function tryParseJsonText(text: string) {
+  const cleaned = text
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/```\s*$/i, '')
+    .trim();
+  try { return JSON.parse(cleaned); } catch {
+    const match = cleaned.match(/\{[\s\S]*\}/);
+    if (match) { try { return JSON.parse(match[0]); } catch {} }
+    return null;
+  }
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -63,12 +76,8 @@ Return STRICT JSON with this structure (no markdown):
 
     const text = await callGemini(prompt);
 
-    let advisories: any;
-    try {
-      advisories = JSON.parse(text);
-    } catch {
-      advisories = { raw: text };
-    }
+    const parsed = tryParseJsonText(text);
+    const advisories = parsed ?? { raw: text };
 
     return new Response(JSON.stringify({ crop, region, advisories }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -51,6 +51,25 @@ interface CacheRow {
 
 const CACHE_TTL_HOURS = 6;
 
+function stripCodeFences(text: string) {
+  return text
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/```\s*$/i, "")
+    .trim();
+}
+
+function cleanMaybeJson(input: any) {
+  if (!input) return input;
+  if (typeof input === "string") {
+    try { return JSON.parse(stripCodeFences(input)); } catch { return input; }
+  }
+  if (typeof input.raw === "string") {
+    try { return JSON.parse(stripCodeFences(input.raw)); } catch { return input; }
+  }
+  return input;
+}
+
 export default function AIInsights() {
   useSEO(
     "AI Insights: Market & Crop Advisory | Smart Bharat",
@@ -101,7 +120,7 @@ export default function AIInsights() {
           const ageMs = Date.now() - new Date(cached.created_at).getTime();
           const ageHours = ageMs / (1000 * 60 * 60);
           if (ageHours < CACHE_TTL_HOURS) {
-            return { market: cached.market_advisory, cropAdvisories: cached.crop_advisories, fromCache: true };
+            return { market: cleanMaybeJson(cached.market_advisory), cropAdvisories: cleanMaybeJson(cached.crop_advisories), fromCache: true };
           }
         }
       }
@@ -115,8 +134,10 @@ export default function AIInsights() {
       if (marketRes.error) throw marketRes.error;
       if (cropRes.error) throw cropRes.error;
 
-      const market = (marketRes.data as any)?.advisory ?? null;
-      const cropAdvisories = (cropRes.data as any)?.advisories ?? null;
+      const marketRaw = (marketRes.data as any)?.advisory ?? null;
+      const cropRaw = (cropRes.data as any)?.advisories ?? null;
+      const market = cleanMaybeJson(marketRaw);
+      const cropAdvisories = cleanMaybeJson(cropRaw);
 
       // 3) Store in cache (best effort)
       const { error: insertErr } = await supabase

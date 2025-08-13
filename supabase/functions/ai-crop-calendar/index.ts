@@ -41,6 +41,19 @@ async function callGemini(prompt: string) {
   return text;
 }
 
+function tryParseJsonText(text: string) {
+  const cleaned = text
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/```\s*$/i, '')
+    .trim();
+  try { return JSON.parse(cleaned); } catch {
+    const match = cleaned.match(/\{[\s\S]*\}/);
+    if (match) { try { return JSON.parse(match[0]); } catch {} }
+    return null;
+  }
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -79,11 +92,11 @@ Ensure valid JSON only (no markdown). Keep culturally and regionally appropriate
 
     const text = await callGemini(prompt);
 
-    // Try parse JSON; if it fails, wrap text minimally
+    const parsed = tryParseJsonText(text);
     let result: any;
-    try {
-      result = JSON.parse(text);
-    } catch {
+    if (parsed) {
+      result = parsed;
+    } else {
       result = { calendar: { months: [] }, irrigation_schedule: [], fertilizer_plan: {}, pest_management: [], raw: text };
     }
 
