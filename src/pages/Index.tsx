@@ -102,14 +102,18 @@ const Index = () => {
         <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/60 to-black/40"></div>
         <video
           className="absolute inset-0 w-full h-full object-cover"
-          src="/videos/hero.mp4"
           poster={heroImage}
           autoPlay
           muted
           loop
           playsInline
+          preload="metadata"
           aria-label="Fields and farms of India"
-        />
+        >
+          <source src="/videos/hero.mp4" type="video/mp4" />
+          <source src="/videos/hero.webm" type="video/webm" />
+          <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm" type="video/webm" />
+        </video>
         <div className="container mx-auto text-center relative z-20">
           <Badge className="mb-4 bg-primary/20 text-white border-primary/30 backdrop-blur-sm">
             🚀 Smart Bharat Innovation Project
@@ -163,7 +167,7 @@ const Index = () => {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-all duration-300 border-0 bg-gradient-to-br from-white to-gray-50">
+              <Card key={index} className="hover:shadow-xl transition-all duration-300">
                 <CardHeader className="text-center pb-4">
                   <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl flex items-center justify-center mx-auto mb-4">
                     {feature.icon}

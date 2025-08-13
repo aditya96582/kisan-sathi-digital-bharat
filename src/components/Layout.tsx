@@ -15,17 +15,47 @@ export default function Layout() {
               </div>
               <span className="text-lg font-semibold">Smart Bharat</span>
             </Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/dashboard" className="story-link">Dashboard</Link>
-              <Link to="/voice" className="story-link flex items-center gap-1"><Mic className="w-4 h-4" />Voice</Link>
-              <Link to="/prices" className="story-link flex items-center gap-1"><TrendingUp className="w-4 h-4" />Prices</Link>
-              <Link to="/weather" className="story-link flex items-center gap-1"><Cloud className="w-4 h-4" />Weather</Link>
-              <Link to="/terrasense-lab" className="story-link flex items-center gap-1"><Shield className="w-4 h-4" />TerraSense</Link>
-              <Link to="/ai-insights" className="story-link flex items-center gap-1"><Globe className="w-4 h-4" />AI</Link>
+            <nav className="hidden md:flex items-center gap-3">
+              <Button asChild variant="nav" size="sm" className="group">
+                <Link to="/dashboard" className="flex items-center gap-2">Dashboard</Link>
+              </Button>
+              <Button asChild variant="nav" size="sm" className="group">
+                <Link to="/voice" className="flex items-center gap-2">
+                  <Mic className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  Voice
+                </Link>
+              </Button>
+              <Button asChild variant="nav" size="sm" className="group">
+                <Link to="/prices" className="flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  Prices
+                </Link>
+              </Button>
+              <Button asChild variant="nav" size="sm" className="group">
+                <Link to="/weather" className="flex items-center gap-2">
+                  <Cloud className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  Weather
+                </Link>
+              </Button>
+              <Button asChild variant="nav" size="sm" className="group">
+                <Link to="/terrasense-lab" className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  TerraSense
+                </Link>
+              </Button>
+              <Button asChild variant="nav" size="sm" className="group">
+                <Link to="/ai-insights" className="flex items-center gap-2">
+                  <Globe className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  AI
+                </Link>
+              </Button>
             </nav>
             <div className="flex items-center gap-2">
-              <Button asChild size="sm" variant="secondary">
-                <Link to="/voice">Start Talking</Link>
+              <Button asChild size="sm" variant="nav" className="group">
+                <Link to="/voice" className="flex items-center gap-2">
+                  <Mic className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  Start Talking
+                </Link>
               </Button>
             </div>
           </div>
