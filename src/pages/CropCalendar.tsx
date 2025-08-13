@@ -19,12 +19,15 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const CropCalendar = () => {
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedCrop, setSelectedCrop] = useState("wheat");
   const [selectedRegion, setSelectedRegion] = useState("uttar-pradesh");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiCalendar, setAiCalendar] = useState<any>(null);
 
   const crops = [
     { value: "wheat", label: "गेहूं (Wheat)" },
@@ -41,6 +44,23 @@ const CropCalendar = () => {
     { value: "madhya-pradesh", label: "मध्य प्रदेश" },
     { value: "rajasthan", label: "राजस्थान" }
   ];
+
+  const generateAICalendar = async () => {
+    setAiLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-crop-calendar', {
+        body: { crop: selectedCrop, region: selectedRegion }
+      });
+      if (error) throw error;
+      setAiCalendar(data);
+      toast({ title: 'AI Calendar Ready', description: 'Calendar generated using Gemini.' });
+    } catch (e) {
+      console.error('AI calendar error', e);
+      toast({ title: 'AI Error', description: 'Failed to generate calendar.', variant: 'destructive' });
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   const upcomingTasks = [
     {
@@ -204,6 +224,10 @@ const CropCalendar = () => {
                     </SelectContent>
                   </Select>
                 </div>
+
+                <Button onClick={generateAICalendar} disabled={aiLoading} className="w-full">
+                  {aiLoading ? 'Generating AI Calendar...' : 'Generate AI Calendar'}
+                </Button>
               </CardContent>
             </Card>
 
@@ -305,28 +329,52 @@ const CropCalendar = () => {
               </CardContent>
             </Card>
 
-            {/* Monthly Overview */}
+            {/* AI Calendar / Monthly Overview */}
             <Card>
               <CardHeader>
-                <CardTitle>January 2024 Overview</CardTitle>
-                <CardDescription>Key activities for this month</CardDescription>
+                <CardTitle>{aiCalendar ? 'AI Calendar (Beta)' : 'January 2024 Overview'}</CardTitle>
+                <CardDescription>
+                  {aiCalendar ? 'AI-generated schedule based on crop and region' : 'Key activities for this month'}
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid md:grid-cols-3 gap-6">
-                  {Object.entries(monthlyOverview.January).map(([crop, activities]) => (
-                    <div key={crop} className="space-y-3">
-                      <h4 className="font-semibold capitalize">{crop}</h4>
-                      <ul className="space-y-2">
-                        {activities.map((activity, index) => (
-                          <li key={index} className="text-sm flex items-start gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
-                            {activity}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
+                {aiCalendar ? (
+                  <div className="space-y-6">
+                    {aiCalendar?.calendar?.months?.slice(0, 3).map((m: any, idx: number) => (
+                      <div key={idx} className="space-y-2">
+                        <h4 className="font-semibold capitalize">{m.month}</h4>
+                        <ul className="space-y-2">
+                          {m.tasks?.map((t: any, i: number) => (
+                            <li key={i} className="text-sm flex items-start gap-2 p-3 rounded-lg bg-muted/30">
+                              <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
+                              <div>
+                                <div className="font-medium">{t.title}</div>
+                                <div className="text-muted-foreground">{t.description}</div>
+                                <div className="text-xs text-muted-foreground mt-1">Window: {t.window} • Priority: {t.priority}</div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid md:grid-cols-3 gap-6">
+                    {Object.entries(monthlyOverview.January).map(([crop, activities]) => (
+                      <div key={crop} className="space-y-3">
+                        <h4 className="font-semibold capitalize">{crop}</h4>
+                        <ul className="space-y-2">
+                          {activities.map((activity, index) => (
+                            <li key={index} className="text-sm flex items-start gap-2">
+                              <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
+                              {activity}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
 

@@ -6,11 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, TrendingUp, TrendingDown, Search, MapPin, Clock, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const MandiPrices = () => {
   const [selectedState, setSelectedState] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiAdvisory, setAiAdvisory] = useState<any>(null);
 
   const states = [
     { code: "all", name: "All States" },
