@@ -72,6 +72,22 @@ const Dashboard = () => {
     fetchAlerts();
   }, []);
 
+  // Realtime updates for alerts
+  useEffect(() => {
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'weather_notifications' },
+        () => setAlertsCount((c) => c + 1)
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   const recentActivities = [
     { action: "Crop Health Scan", crop: "Wheat", result: "Healthy", time: "2 hours ago" },
     { action: "Mandi e-Pass Generated", location: "Kanpur Mandi", time: "4 hours ago" },

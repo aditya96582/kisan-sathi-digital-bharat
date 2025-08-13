@@ -235,6 +235,9 @@ const MandiPrices = () => {
     link.setAttribute('rel', 'canonical');
     link.setAttribute('href', window.location.href);
     if (!existing) document.head.appendChild(link);
+
+    // Auto fetch AI advisory on load
+    getAIAdvisory();
   }, []);
 
   const getAIAdvisory = async () => {
