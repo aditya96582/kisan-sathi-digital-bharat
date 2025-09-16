@@ -46,32 +46,32 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
           {/* Main Heading */}
           <div className="space-y-6 animate-fadeSlideUp" style={{ animationDelay: '0.2s' }}>
             <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
-              Empowering{" "}
-              <span className="bg-gradient-to-r from-gold-300 via-gold-400 to-saffron-400 bg-clip-text text-transparent">
-                Farmers
+              കേരള{" "}
+              <span className="bg-gradient-to-r from-kerala-green-light via-backwater-blue to-spice-warm bg-clip-text text-transparent">
+                കർഷകരുടെ
               </span>
               <br />
-              Through Technology
+              ഡിജിറ്റൽ സഖി
             </h1>
             <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed">
-              A comprehensive agricultural platform offering voice-based assistance, real-time market prices, 
-              AI-powered crop health detection, and weather advisory services in multiple regional languages.
+              Kerala farmers' AI-powered personal assistant with Malayalam voice support, 
+              real-time market prices, crop health detection, and personalized agricultural guidance.
             </p>
           </div>
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fadeSlideUp" style={{ animationDelay: '0.4s' }}>
-            <Button asChild size="lg" variant="premium" className="text-lg px-8 py-4">
-              <Link to="/dashboard" className="flex items-center gap-3">
+            <Button asChild size="lg" className="bg-gradient-kerala text-white hover:shadow-nature transition-all duration-500 hover:scale-105 text-lg px-8 py-4">
+              <Link to="/farmer-profile" className="flex items-center gap-3">
                 <Users className="w-6 h-6" />
-                Go to Dashboard
+                കർഷക പ്രൊഫൈൽ
                 <span className="ml-1">→</span>
               </Link>
             </Button>
-            <Button asChild size="lg" variant="floating" className="text-lg px-8 py-4">
+            <Button asChild size="lg" variant="outline" className="bg-white/20 text-white border-white/30 hover:bg-white/30 backdrop-blur-sm text-lg px-8 py-4">
               <Link to="/voice" className="flex items-center gap-3">
                 <Mic className="w-6 h-6" />
-                Voice Assistant
+                കൃഷി സഖി
                 <span className="ml-1">🎤</span>
               </Link>
             </Button>
@@ -80,14 +80,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
           {/* Feature Highlights */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 animate-fadeSlideUp" style={{ animationDelay: '0.6s' }}>
             {[
-              { title: "Voice AI", desc: "12+ Languages", icon: "🗣️" },
-              { title: "Real-time Data", desc: "Live Market Prices", icon: "📊" },
-              { title: "Smart Detection", desc: "AI Crop Health", icon: "🌱" }
+              { title: "മലയാളം AI", desc: "Voice Support", icon: "🗣️" },
+              { title: "തത്സമയ വിവരങ്ങൾ", desc: "Market Prices", icon: "📊" },
+              { title: "വിള ആരോഗ്യം", desc: "AI Detection", icon: "🌱" }
             ].map((feature, index) => (
-              <div key={index} className="glass rounded-2xl p-6 text-center group hover:scale-105 transition-all duration-300">
+              <div key={index} className="glass rounded-2xl p-6 text-center group hover:scale-105 transition-all duration-500 shadow-gentle hover:shadow-nature">
                 <div className="text-3xl mb-3">{feature.icon}</div>
                 <h3 className="font-bold text-white text-lg mb-2">{feature.title}</h3>
-                <p className="text-cream-100/80">{feature.desc}</p>
+                <p className="text-white/80">{feature.desc}</p>
               </div>
             ))}
           </div>

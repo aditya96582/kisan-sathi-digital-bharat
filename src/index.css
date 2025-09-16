@@ -8,89 +8,90 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Cream Tones (Base/Background) */
-    --cream-50: 50 100% 98%;  /* #fffdf7 */
-    --cream-100: 47 100% 96%; /* #fffbf0 */
-    --cream-200: 48 88% 89%;  /* #fff5d6 */
+    /* Soft Natural Tones (Base/Background) */
+    --cream-50: 45 35% 97%;   /* #f8f6f3 - Softer cream */
+    --cream-100: 42 28% 94%;  /* #f2ede8 - Warm off-white */
+    --cream-200: 38 25% 88%;  /* #e8ddd2 - Gentle beige */
     
-    /* Gold Tones (Primary Brand) */
-    --gold-100: 50 93% 88%;   /* #fef9c3 */
-    --gold-200: 49 93% 76%;   /* #fef08a */
-    --gold-300: 49 93% 62%;   /* #fde047 */
-    --gold-400: 48 95% 53%;   /* #facc15 */
-    --gold-500: 45 85% 51%;   /* #d4af37 */
-    --gold-600: 45 94% 40%;   /* #ca8a04 */
-    --gold-700: 42 89% 32%;   /* #a16207 */
+    /* Warm Earth Tones (Primary Brand) */
+    --gold-100: 48 45% 92%;   /* #f5f1e8 - Very soft gold */
+    --gold-200: 45 38% 85%;   /* #ede4d3 - Light warm beige */
+    --gold-300: 42 42% 75%;   /* #d9c7a8 - Muted gold */
+    --gold-400: 39 48% 65%;   /* #c4a373 - Warm brown-gold */
+    --gold-500: 36 52% 55%;   /* #a67c52 - Earthy gold */
+    --gold-600: 33 48% 45%;   /* #8a5a42 - Deep warm brown */
+    --gold-700: 30 45% 35%;   /* #6b4433 - Rich earth tone */
     
-    /* Indian Flag Inspired Colors */
-    --saffron-500: 20 100% 60%; /* #ff9933 */
-    --saffron-600: 17 100% 53%; /* #ff8800 */
-    --indian-green-500: 110 87% 25%; /* #138808 */
-    --indian-green-600: 111 87% 21%; /* #0f6b06 */
-    --indian-blue-500: 240 100% 25%; /* #000080 */
-    --indian-blue-600: 240 100% 20%; /* #000066 */
+    /* Kerala Nature Inspired Colors */
+    --kerala-green-light: 135 35% 70%; /* #9cc4a0 - Soft coconut palm */
+    --kerala-green: 140 40% 45%;       /* #4a7c59 - Calm forest green */
+    --kerala-green-deep: 145 45% 35%;  /* #316b4a - Deep nature green */
+    --backwater-blue: 200 25% 65%;     /* #8fa4b3 - Gentle water blue */
+    --backwater-deep: 205 30% 45%;     /* #5a7d94 - Calm water */
+    --spice-warm: 25 35% 65%;          /* #b59977 - Gentle spice tone */
     
-    /* Semantic Colors Based on Premium Palette */
+    /* Semantic Colors Based on Calm Natural Palette */
     --background: var(--cream-50);
-    --foreground: 210 17% 15%;
+    --foreground: 25 25% 25%;  /* Soft dark brown */
     
     --card: var(--cream-50);
-    --card-foreground: 210 17% 15%;
+    --card-foreground: 25 25% 25%;
     
     --popover: var(--cream-50);
-    --popover-foreground: 210 17% 15%;
+    --popover-foreground: 25 25% 25%;
     
-    --primary: var(--gold-500);
+    --primary: var(--kerala-green);
     --primary-foreground: var(--cream-50);
-    --primary-glow: var(--gold-400);
+    --primary-glow: var(--kerala-green-light);
     
     --secondary: var(--cream-200);
     --secondary-foreground: var(--gold-700);
     
     --muted: var(--cream-100);
-    --muted-foreground: 210 17% 40%;
+    --muted-foreground: 25 15% 50%;
     
-    --accent: var(--saffron-500);
+    --accent: var(--spice-warm);
     --accent-foreground: var(--cream-50);
     
-    --destructive: 0 84% 60%;
+    --destructive: 355 65% 65%;  /* Softer red */
     --destructive-foreground: var(--cream-50);
     
-    --border: var(--gold-200);
+    --border: var(--cream-200);
     --input: var(--cream-100);
-    --ring: var(--gold-500);
+    --ring: var(--kerala-green);
     
-    --success: var(--indian-green-500);
+    --success: var(--kerala-green);
     --success-foreground: var(--cream-50);
-    --warning: var(--gold-400);
-    --warning-foreground: 210 17% 15%;
-    --info: var(--indian-blue-500);
+    --warning: var(--spice-warm);
+    --warning-foreground: var(--cream-50);
+    --info: var(--backwater-blue);
     --info-foreground: var(--cream-50);
     
-    /* Premium Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--gold-500)), hsl(var(--gold-600)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--gold-500)) 0%, hsl(var(--saffron-500)) 50%, hsl(var(--indian-green-500)) 100%);
+    /* Soft Natural Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--kerala-green)), hsl(var(--kerala-green-deep)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--kerala-green-light)) 0%, hsl(var(--backwater-blue)) 50%, hsl(var(--spice-warm)) 100%);
     --gradient-card: linear-gradient(145deg, hsl(var(--cream-50)) 0%, hsl(var(--cream-100)) 100%);
-    --gradient-gold-light: linear-gradient(135deg, hsl(var(--gold-100)), hsl(var(--cream-200)));
-    --gradient-cream: linear-gradient(180deg, hsl(var(--cream-50)), hsl(var(--cream-100)));
-    --gradient-status-success: linear-gradient(135deg, hsl(var(--indian-green-500)), hsl(var(--indian-green-600)));
+    --gradient-nature: linear-gradient(135deg, hsl(var(--kerala-green-light)), hsl(var(--cream-200)));
+    --gradient-warm: linear-gradient(180deg, hsl(var(--cream-50)), hsl(var(--cream-100)));
+    --gradient-kerala: linear-gradient(135deg, hsl(var(--kerala-green)), hsl(var(--backwater-deep)));
     
-    /* Premium Shadows & Effects */
-    --shadow-elegant: 0 10px 30px -10px hsl(var(--gold-500) / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--gold-400) / 0.4);
-    --shadow-card: 0 4px 20px -4px hsl(var(--gold-500) / 0.15);
-    --shadow-premium: 0 20px 60px -10px hsl(var(--gold-500) / 0.25);
+    /* Soft Natural Shadows & Effects */
+    --shadow-gentle: 0 8px 25px -8px hsl(var(--kerala-green) / 0.15);
+    --shadow-nature: 0 0 30px hsl(var(--kerala-green-light) / 0.2);
+    --shadow-card: 0 4px 15px -4px hsl(var(--kerala-green) / 0.08);
+    --shadow-calm: 0 15px 45px -8px hsl(var(--kerala-green) / 0.12);
     
-    /* Aura & Particle Effects */
-    --aura-gold: hsl(var(--gold-300)) / 0.2;
-    --aura-saffron: hsl(var(--saffron-500)) / 0.15;
-    --aura-green: hsl(var(--indian-green-500)) / 0.15;
-    --aura-blue: hsl(var(--indian-blue-500)) / 0.15;
+    /* Natural Aura & Particle Effects */
+    --aura-nature: hsl(var(--kerala-green-light)) / 0.15;
+    --aura-spice: hsl(var(--spice-warm)) / 0.12;
+    --aura-water: hsl(var(--backwater-blue)) / 0.12;
+    --aura-earth: hsl(var(--gold-300)) / 0.1;
     
-    /* Animation Variables */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    --transition-elegant: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    /* Butter-Smooth Animation Variables */
+    --transition-silk: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition-flow: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-gentle: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-nature: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     
     --radius: 0.75rem;
     

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { HeroSection } from "@/components/HeroSection";
 import { StatsSection } from "@/components/StatsSection";
 import { FeatureGrid } from "@/components/PremiumCard";
+import { KeralaVideoSection } from "@/components/KeralaVideoSection";
 import { AnimatedBackground } from "@/components/FloatingElements";
 
 const Index = () => {
@@ -110,22 +111,25 @@ const Index = () => {
   ];
 
   return (
-    <AnimatedBackground className="min-h-screen bg-cream-50">
+    <AnimatedBackground className="min-h-screen bg-gradient-warm">
       {/* Hero Section */}
       <HeroSection />
       
       {/* Stats Section */}
-      <StatsSection className="bg-gradient-cream" />
+      <StatsSection className="bg-gradient-warm" />
+
+      {/* Kerala Video Section */}
+      <KeralaVideoSection />
       
       {/* Features Section */}
       <section className="py-24 px-4">
         <div className="container mx-auto">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-hero bg-clip-text text-transparent">
-              Revolutionary Features
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-kerala-green via-backwater-blue to-spice-warm bg-clip-text text-transparent">
+              കേരള കൃഷിക്കുള്ള AI സൊല്യൂഷനുകൾ
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Advanced agricultural technology solutions designed specifically for Indian farmers
+              Advanced agricultural technology solutions designed specifically for Kerala farmers
             </p>
           </div>
           <FeatureGrid features={features} />
